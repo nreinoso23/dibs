@@ -136,8 +136,13 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Circuit Diagrams
 
 <p align="center">
-  <img src="docs/images/circuit-diagrams/Outer_Circuit_Final_with_Cords.png" alt="Outer Device Circuit" width="400">
-  <img src="docs/images/circuit-diagrams/Inner%20Circuit_Final.png" alt="Inner Device Circuit" width="400">
+  <em>Outer Device</em><br>
+  <img src="docs/images/circuit-diagrams/Outer_Circuit_Final_with_Cords.png" alt="Outer Device Circuit" width="700">
+</p>
+
+<p align="center">
+  <em>Inner Device</em><br>
+  <img src="docs/images/circuit-diagrams/Inner%20Circuit_Final.png" alt="Inner Device Circuit" width="700">
 </p>
 
 ### Cost Comparison
