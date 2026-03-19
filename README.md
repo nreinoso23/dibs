@@ -8,6 +8,14 @@ This system pairs an outer kiosk (Raspberry Pi 5 with touchscreen, sensors, and 
 
 Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineering.
 
+<p align="center">
+  <img src="docs/images/device-hero.jpeg" alt="Dibs Kiosk System" width="600">
+</p>
+
+<p align="center">
+  <a href="https://youtu.be/KSitBOF_cG8">📺 Watch the full demo video</a>
+</p>
+
 ---
 
 ## Table of Contents
@@ -88,11 +96,22 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
+<p align="center">
+  <img src="docs/images/Code_Flowchart.jpeg" alt="Code Architecture Flowchart" width="700">
+  <br>
+  <em>Code architecture flowchart</em>
+</p>
+
 ---
 
 ## Hardware
 
 ### Outer Device (Mounted outside room door)
+
+<p align="center">
+  <img src="docs/images/hardware/Outer_Device_Front.JPG" alt="Outer Device Front" width="400">
+  <img src="docs/images/cad-renders/Outer_Device_Isometric.PNG" alt="Outer Device CAD" width="400">
+</p>
 
 | Component | Purpose |
 |---|---|
@@ -106,10 +125,21 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 
 ### Inner Device (Mounted inside room)
 
+<p align="center">
+  <img src="docs/images/cad-renders/Inner_Device_Isometric.PNG" alt="Inner Device CAD" width="400">
+</p>
+
 | Component | Purpose |
 |---|---|
 | ESP32-S3 with Camera | Video streaming for face detection |
 | 16×2 I2C LCD (GPIO 41 SDA, GPIO 42 SCL) | Context-aware room messages |
+
+### Circuit Diagrams
+
+<p align="center">
+  <img src="docs/images/circuit-diagrams/Outer_Circuit_Final.png" alt="Outer Device Circuit" width="400">
+  <img src="docs/images/circuit-diagrams/Inner%20Circuit_Final.png" alt="Inner Device Circuit" width="400">
+</p>
 
 ### Cost Comparison
 
