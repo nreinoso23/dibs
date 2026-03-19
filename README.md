@@ -51,6 +51,12 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 - **Adaptive polling** — Dynamic refresh rates (5–30s) based on proximity to check-in windows
 - **Web + kiosk sync** — Bidirectional: bookings from either interface appear on both instantly
 
+<p align="center">
+  <img src="docs/images/kiosk-gui-labeled.png" alt="Kiosk GUI Interface" width="700">
+  <br>
+  <em>Kiosk touchscreen interface with labeled components</em>
+</p>
+
 ---
 
 ## System Architecture
@@ -103,8 +109,7 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Outer Device (Mounted outside room door)
 
 <p align="center">
-  <img src="docs/images/hardware/Outer_Device_Front_Isometric.JPG" alt="Outer Device" width="400">
-  <img src="docs/images/cad-renders/Outer_Device_Isometric.PNG" alt="Outer Device CAD" width="400">
+  <img src="docs/images/cad-renders/Outer_Device_Isometric.PNG" alt="Outer Device CAD" width="500">
 </p>
 
 | Component | Purpose |
@@ -120,8 +125,7 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Inner Device (Mounted inside room)
 
 <p align="center">
-  <img src="docs/images/hardware/Inner_Device_Front.JPG" alt="Inner Device" width="400">
-  <img src="docs/images/cad-renders/Inner_Device_Isometric.PNG" alt="Inner Device CAD" width="400">
+  <img src="docs/images/cad-renders/Inner_Device_Isometric.PNG" alt="Inner Device CAD" width="500">
 </p>
 
 | Component | Purpose |
