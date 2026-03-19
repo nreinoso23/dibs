@@ -6,7 +6,7 @@ Dibs is a distributed IoT room management system that solves a simple but persis
 
 This system pairs an outer kiosk (Raspberry Pi 5 with touchscreen, sensors, and physical buttons) with an inner occupancy module (ESP32-S3 with camera and LCD), all synchronized through Google Calendar API to a web booking interface — delivering real-time room status, automated check-in enforcement, and walk-in booking at **~$167 per unit** versus $749–$800+ for enterprise competitors.
 
-Built as a Senior Learning Design Project (SLDP) at NYU Tandon School of Engineering.
+Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineering.
 
 ---
 
@@ -81,9 +81,10 @@ Built as a Senior Learning Design Project (SLDP) at NYU Tandon School of Enginee
                             Google Calendar API
                                     │
 ┌───────────────────────────────────┼──────────────────────────────────┐
-│                  Web Booking Interface (Render)                       │
-│                  - Remote reservations                                │
-│                  - Same calendar as single source of truth            │
+│                  Web Booking Interface (nyu-dibner-bookings.onrender.com)      │
+│                  Built by Kashvi Rungta                                       │
+│                  - Remote reservations                                        │
+│                  - Same calendar as single source of truth                    │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -201,7 +202,7 @@ Built as a Senior Learning Design Project (SLDP) at NYU Tandon School of Enginee
 
 **Infrastructure:**
 - Google Calendar API — Single source of truth for all reservations
-- Render — Web booking interface hosting
+- Render — Web booking interface hosting ([nyu-dibner-bookings.onrender.com](https://nyu-dibner-bookings.onrender.com/))
 - Open-Meteo API — Weather data
 
 ---
@@ -241,8 +242,8 @@ dibs/
 │   ├── pi_cam_smart_lcd.py         # Face detection + LCD message logic
 │   └── requirements.txt            # OpenCV dependencies
 │
-├── web/                            # Web booking interface (deployed on Render)
-│   └── ...                         # Express.js web app
+├── web/                            # Web booking interface (deployed on Render, built by Kashvi Rungta)
+│   └── ...                         # See: https://nyu-dibner-bookings.onrender.com/
 │
 ├── enclosures/                     # Hardware design files
 │   ├── outer_device.step           # Outer kiosk CAD model
@@ -421,12 +422,12 @@ NO_SHOW_CANCEL_MINUTES = 10     # Minutes after start to cancel if not checked i
 
 | Name | Role | Major |
 |---|---|---|
-| Nicholas Reinoso | Electrical & software systems | B.S. Electrical and Computer Engineering |
-| Jiya Patel | Mechanical design & enclosures | B.S. Mechanical Engineering |
-| Kashvi Rungta | Web development | B.S. Computer Science |
+| Nicholas Reinoso | Embedded systems, software development, CAD enclosure design, protoboard layout, computer vision, API integration | B.S. Electrical and Computer Engineering |
+| Kashvi Rungta | Web booking interface and Pi integration ([nyu-dibner-bookings.onrender.com](https://nyu-dibner-bookings.onrender.com/)) | B.S. Computer Science |
+| Jiya Patel | Project coordination and documentation support | B.S. Mechanical Engineering |
 
 ---
 
 ## License
 
-[Choose your license — MIT recommended for portfolio projects]
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
