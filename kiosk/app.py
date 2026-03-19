@@ -126,7 +126,7 @@ class TestApp(App):
     check_in_enabled = BooleanProperty(False)
     
     # Password (in production, hash this and store securely!)
-    admin_password = "prandr"
+    admin_password = os.environ.get("KIOSK_ADMIN_PW", "changeme")
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

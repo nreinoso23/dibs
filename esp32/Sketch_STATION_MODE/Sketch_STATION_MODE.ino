@@ -20,7 +20,7 @@
 
 // WiFi credentials - CHANGE THESE to your router!
 const char* ssid = "nyu-android";         // ← Change this!
-const char* password = "dr0idz-2o2!"; // ← Change this!
+const char* password = "YOUR_WIFI_PASSWORD"; // ← Change this!
 
 // I2C LCD Configuration
 #define LCD_ADDRESS 0x27
