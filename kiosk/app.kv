@@ -1,0 +1,1245 @@
+<WalkInButton@ButtonBehavior+BoxLayout>:
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: (0, 0.6, 0, 1) if self.enabled_state else (0.4, 0.4, 0.4, 1)
+        RoundedRectangle:
+            radius: [16, 16, 16, 16]
+            pos: self.pos
+            size: self.size
+    enabled_state: True
+
+#:import dp kivy.metrics.dp
+#:import ClockWidget clock.ClockWidget
+#:import WeatherWidget weather.WeatherWidget
+#:import RoundedRectangleContainer rounded.RoundedRectangleContainer
+#:import SchedulerWidget scheduler.SchedulerWidget
+#:import CheckInButton scheduler.CheckInButton
+#:import FullDayScheduleWidget scheduler.FullDayScheduleWidget
+#:import WalkInWidget scheduler.WalkInWidget
+
+# Custom tile styles
+<ThinTile@RoundedRectangleContainer>:
+    size_hint_y: None
+    height: dp(70)
+    background_color: 0.12, 0.12, 0.12, 1
+    corner_radius: 12
+
+<BigTile@RoundedRectangleContainer>:
+    background_color: 0.18, 0.18, 0.18, 1
+    corner_radius: 16
+
+<BigButtonTile@ButtonBehavior+RoundedRectangleContainer>:
+    background_color: 0.18, 0.18, 0.18, 1
+    corner_radius: 16
+
+# Main Menu Screen
+<MenuScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(10)
+
+        # Top row - Quit and Settings (half width each)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(70)
+            spacing: dp(10)
+
+            BigButtonTile:
+                on_release:
+                    app.root.transition.direction = 'left'
+                    app.clear_quit_password()
+                    app.root.current = 'password_quit'
+                Label:
+                    text: "Quit"
+                    font_size: '28sp'
+                    bold: True
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+
+            BigButtonTile:
+                on_release:
+                    app.root.transition.direction = 'left'
+                    app.clear_settings_password()
+                    app.root.current = 'password_settings'
+                Label:
+                    text: "Settings"
+                    font_size: '28sp'
+                    bold: True
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+
+        # Main content - 2 columns
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(10)
+
+            # Left column - Schedule and Clock/Weather (wider)
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 1.2
+                spacing: dp(10)
+
+                # Schedule tile
+                BigButtonTile:
+                    on_release:
+                        app.root.transition.direction = 'left'
+                        app.root.current = 'schedule'
+                    SchedulerWidget:
+                        room_name: "NYU Dibner Study Pod LC 416"
+
+                # Clock & Weather tile
+                BigTile:
+                    orientation: 'vertical'
+                    padding: dp(20)
+                    spacing: dp(10)
+
+                    # Date at top
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: 0.25
+                        Label:
+                            id: date_display
+                            text: app.current_date
+                            font_size: '32sp'
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                    # Time in middle
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: 0.5
+                        Label:
+                            id: time_display
+                            text: app.current_time
+                            font_size: '72sp'
+                            bold: True
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+                    # Weather at bottom
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: 0.25
+                        spacing: dp(10)
+                        Image:
+                            id: weather_icon_display
+                            source: app.weather_icon_source
+                            opacity: 1 if self.source else 0
+                            size_hint_x: None
+                            width: dp(80)
+                            allow_stretch: True
+                        Label:
+                            text: app.temperature_text
+                            font_size: '48sp'
+                            bold: True
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.size
+
+            # Right column - Walk In and Check In (narrower, vertical rectangles)
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.8
+                spacing: dp(10)
+
+                # Walk In button
+                WalkInButton:
+                    enabled_state: app.walk_in_enabled
+                    on_release: app.goto_walkin_screen() if app.walk_in_enabled else None
+                    Label:
+                        text: "Walk In"
+                        font_size: '56sp'
+                        bold: True
+                        halign: 'center'
+                        valign: 'bottom'
+                        text_size: self.size
+                        size_hint_y: 0.6
+                    Label:
+                        text: app.walk_in_status_text
+                        font_size: '18sp'
+                        color: 0.7, 0.7, 0.7, 1
+                        halign: 'center'
+                        valign: 'top'
+                        text_size: self.size
+                        size_hint_y: 0.4
+
+                # Check In button - NOW CONSISTENT WITH WALK IN
+                CheckInButton:
+
+# Password for Quit
+<PasswordQuitScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text: "Enter Password to Quit"
+            font_size: '40sp'
+            bold: True
+            size_hint_y: None
+            height: dp(80)
+
+        # Display for entered password
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(90)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.2, 0.2, 0.2, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [10]
+            Label:
+                id: password_quit_display
+                text: "*" * len(app.quit_password_input)
+                font_size: '36sp'
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+        # Custom alphanumeric keyboard
+        GridLayout:
+            cols: 10
+            spacing: dp(5)
+            size_hint_y: 0.5
+
+            # Numbers row
+            Button:
+                text: "1"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("1")
+            Button:
+                text: "2"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("2")
+            Button:
+                text: "3"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("3")
+            Button:
+                text: "4"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("4")
+            Button:
+                text: "5"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("5")
+            Button:
+                text: "6"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("6")
+            Button:
+                text: "7"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("7")
+            Button:
+                text: "8"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("8")
+            Button:
+                text: "9"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("9")
+            Button:
+                text: "0"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("0")
+
+            # First letter row
+            Button:
+                text: "Q"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("q")
+            Button:
+                text: "W"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("w")
+            Button:
+                text: "E"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("e")
+            Button:
+                text: "R"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("r")
+            Button:
+                text: "T"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("t")
+            Button:
+                text: "Y"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("y")
+            Button:
+                text: "U"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("u")
+            Button:
+                text: "I"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("i")
+            Button:
+                text: "O"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("o")
+            Button:
+                text: "P"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("p")
+
+            # Second letter row
+            Button:
+                text: "A"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("a")
+            Button:
+                text: "S"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("s")
+            Button:
+                text: "D"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("d")
+            Button:
+                text: "F"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("f")
+            Button:
+                text: "G"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("g")
+            Button:
+                text: "H"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("h")
+            Button:
+                text: "J"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("j")
+            Button:
+                text: "K"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("k")
+            Button:
+                text: "L"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("l")
+            Button:
+                text: "⌫"
+                font_size: '32sp'
+                on_release: app.backspace_quit_password()
+
+            # Third letter row
+            Button:
+                text: "Z"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("z")
+            Button:
+                text: "X"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("x")
+            Button:
+                text: "C"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("c")
+            Button:
+                text: "V"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("v")
+            Button:
+                text: "B"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("b")
+            Button:
+                text: "N"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("n")
+            Button:
+                text: "M"
+                font_size: '28sp'
+                on_release: app.add_to_quit_password("m")
+            Button:
+                text: "Clear"
+                font_size: '24sp'
+                on_release: app.clear_quit_password()
+                background_color: 0.8, 0.3, 0, 1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(80)
+            spacing: dp(10)
+
+            Button:
+                text: "Submit"
+                font_size: '32sp'
+                bold: True
+                background_color: 0, 0.6, 0, 1
+                on_release: app.verify_quit_password(app.quit_password_input)
+
+            Button:
+                text: "Back"
+                font_size: '28sp'
+                background_color: 0.3, 0.3, 0.3, 1
+                on_release: app.goto_menu()
+
+# Password for Settings
+<PasswordSettingsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text: "Enter Password for Settings"
+            font_size: '40sp'
+            bold: True
+            size_hint_y: None
+            height: dp(80)
+
+        # Display for entered password
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(90)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.2, 0.2, 0.2, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [10]
+            Label:
+                id: password_settings_display
+                text: "*" * len(app.settings_password_input)
+                font_size: '36sp'
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+        # Custom alphanumeric keyboard
+        GridLayout:
+            cols: 10
+            spacing: dp(5)
+            size_hint_y: 0.5
+
+            # Numbers row
+            Button:
+                text: "1"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("1")
+            Button:
+                text: "2"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("2")
+            Button:
+                text: "3"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("3")
+            Button:
+                text: "4"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("4")
+            Button:
+                text: "5"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("5")
+            Button:
+                text: "6"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("6")
+            Button:
+                text: "7"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("7")
+            Button:
+                text: "8"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("8")
+            Button:
+                text: "9"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("9")
+            Button:
+                text: "0"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("0")
+
+            # First letter row
+            Button:
+                text: "Q"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("q")
+            Button:
+                text: "W"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("w")
+            Button:
+                text: "E"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("e")
+            Button:
+                text: "R"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("r")
+            Button:
+                text: "T"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("t")
+            Button:
+                text: "Y"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("y")
+            Button:
+                text: "U"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("u")
+            Button:
+                text: "I"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("i")
+            Button:
+                text: "O"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("o")
+            Button:
+                text: "P"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("p")
+
+            # Second letter row
+            Button:
+                text: "A"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("a")
+            Button:
+                text: "S"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("s")
+            Button:
+                text: "D"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("d")
+            Button:
+                text: "F"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("f")
+            Button:
+                text: "G"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("g")
+            Button:
+                text: "H"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("h")
+            Button:
+                text: "J"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("j")
+            Button:
+                text: "K"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("k")
+            Button:
+                text: "L"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("l")
+            Button:
+                text: "⌫"
+                font_size: '32sp'
+                on_release: app.backspace_settings_password()
+
+            # Third letter row
+            Button:
+                text: "Z"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("z")
+            Button:
+                text: "X"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("x")
+            Button:
+                text: "C"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("c")
+            Button:
+                text: "V"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("v")
+            Button:
+                text: "B"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("b")
+            Button:
+                text: "N"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("n")
+            Button:
+                text: "M"
+                font_size: '28sp'
+                on_release: app.add_to_settings_password("m")
+            Button:
+                text: "Clear"
+                font_size: '24sp'
+                on_release: app.clear_settings_password()
+                background_color: 0.8, 0.3, 0, 1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(80)
+            spacing: dp(10)
+
+            Button:
+                text: "Submit"
+                font_size: '32sp'
+                bold: True
+                background_color: 0, 0.6, 0, 1
+                on_release: app.verify_settings_password(app.settings_password_input)
+
+            Button:
+                text: "Back"
+                font_size: '28sp'
+                background_color: 0.3, 0.3, 0.3, 1
+                on_release: app.goto_menu()
+
+# Confirm Quit Screen
+<ConfirmQuitScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(40)
+        spacing: dp(20)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Widget:
+            size_hint_y: 0.3
+
+        Label:
+            text: "Are you sure you want to quit?"
+            font_size: '40sp'
+            bold: True
+            size_hint_y: None
+            height: dp(100)
+
+        Widget:
+            size_hint_y: 0.2
+
+        Button:
+            text: "Yes, Quit"
+            size_hint_y: None
+            height: dp(90)
+            font_size: '36sp'
+            bold: True
+            background_color: 0.8, 0, 0, 1
+            on_release: app.quit_app()
+
+        Button:
+            text: "No, Go Back"
+            size_hint_y: None
+            height: dp(90)
+            font_size: '36sp'
+            bold: True
+            background_color: 0, 0.6, 0, 1
+            on_release:
+                app.root.transition.direction = 'right'
+                app.root.current = 'menu'
+
+        Widget:
+            size_hint_y: 0.3
+
+# Schedule Screen (Full Day)
+<ScheduleScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        FullDayScheduleWidget:
+            room_name: "NYU Dibner Study Pod LC 416"
+
+        Button:
+            text: "Back to Menu"
+            size_hint_y: None
+            height: dp(80)
+            font_size: '28sp'
+            on_release: app.goto_menu()
+
+# Check In Screen
+<CheckInScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        # Top section - Title and status
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(100)
+            spacing: dp(5)
+            
+            Label:
+                text: "Check In - Enter Your N Number"
+                font_size: '44sp'
+                bold: True
+                size_hint_y: None
+                height: dp(50)
+            
+            Label:
+                text: app.checkin_status_text
+                font_size: '28sp'
+                size_hint_y: None
+                height: dp(40)
+                color: 0.8, 0.8, 0.8, 1
+
+        # N Number display
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(100)
+            padding: [dp(50), 0, dp(50), 0]
+            
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.2, 0.2, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [12]
+                Label:
+                    id: n_number_display
+                    text: app.n_number_input if len(app.n_number_input) > 1 else "N________"
+                    font_size: '52sp'
+                    bold: True
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    color: (1, 1, 1, 1) if len(app.n_number_input) > 1 else (0.5, 0.5, 0.5, 1)
+
+        Widget:
+            size_hint_y: 0.02
+
+        # Main content area - Keypad on left, buttons on right
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(30)
+            padding: [dp(30), 0, dp(30), 0]
+
+            # Left side - Number pad and controls
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(15)
+                size_hint_x: 0.70
+
+                # 3x3 grid for numbers 1-9
+                GridLayout:
+                    cols: 3
+                    spacing: dp(15)
+                    size_hint_y: 0.75
+
+                    # Row 1: 1 2 3
+                    Button:
+                        id: num_1
+                        text: "1"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("1")
+                    Button:
+                        id: num_2
+                        text: "2"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("2")
+                    Button:
+                        id: num_3
+                        text: "3"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("3")
+
+                    # Row 2: 4 5 6
+                    Button:
+                        id: num_4
+                        text: "4"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("4")
+                    Button:
+                        id: num_5
+                        text: "5"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("5")
+                    Button:
+                        id: num_6
+                        text: "6"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("6")
+
+                    # Row 3: 7 8 9
+                    Button:
+                        id: num_7
+                        text: "7"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("7")
+                    Button:
+                        id: num_8
+                        text: "8"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("8")
+                    Button:
+                        id: num_9
+                        text: "9"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("9")
+
+                # Bottom row: Clear, 0, Backspace
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: dp(15)
+                    size_hint_y: 0.25
+
+                    Button:
+                        id: clear_btn
+                        text: "Clear"
+                        font_size: '36sp'
+                        bold: True
+                        on_release: app.clear_n_number()
+                    Button:
+                        id: num_0
+                        text: "0"
+                        font_size: '64sp'
+                        bold: True
+                        on_release: app.add_to_n_number("0")
+                    Button:
+                        id: backspace_btn
+                        text: "⌫"
+                        font_size: '52sp'
+                        bold: True
+                        on_release: app.backspace_n_number()
+
+            # Right side - Back and Submit buttons stacked
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(15)
+                size_hint_x: 0.30
+
+                Button:
+                    id: back_btn
+                    text: "Back"
+                    font_size: '44sp'
+                    bold: True
+                    on_release: app.goto_menu()
+
+                Button:
+                    id: submit_btn
+                    text: "Submit"
+                    font_size: '44sp'
+                    bold: True
+                    background_color: 0, 0.7, 0, 1
+                    on_release: app.submit_n_number()
+
+        Widget:
+            size_hint_y: 0.02
+
+<WalkInScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text: "Walk-In Booking"
+            font_size: '36sp'
+            bold: True
+            size_hint_y: None
+            height: dp(60)
+
+        Widget:
+            size_hint_y: 0.05
+
+        Label:
+            text: "Select Duration (minutes)"
+            font_size: '28sp'
+            size_hint_y: None
+            height: dp(50)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(120)
+            spacing: dp(15)
+            padding: [dp(20), 0]
+
+            Label:
+                text: "15"
+                font_size: '24sp'
+                size_hint_x: None
+                width: dp(50)
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+            Slider:
+                id: duration_slider
+                min: 15
+                max: min(120, app.max_walk_in_duration)
+                value: 60
+                step: 15
+                size_hint_x: 1
+                on_value: root.ids.duration_display.text = f"{int(self.value)} minutes"
+
+            Label:
+                text: str(int(min(120, app.max_walk_in_duration)))
+                font_size: '24sp'
+                size_hint_x: None
+                width: dp(50)
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+        Label:
+            id: duration_display
+            text: "60 minutes"
+            font_size: '40sp'
+            bold: True
+            size_hint_y: None
+            height: dp(80)
+
+        Label:
+            text: f"Appointment ends at: {app.walk_in_end_time}"
+            font_size: '24sp'
+            size_hint_y: None
+            height: dp(50)
+            color: 0.9, 0.9, 0.9, 1
+
+        Label:
+            text: app.walk_in_limit_reason
+            font_size: '18sp'
+            size_hint_y: None
+            height: dp(45)
+            color: 0.7, 0.7, 0.7, 1
+
+        Widget:
+            size_hint_y: 0.1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(75)
+            spacing: dp(10)
+
+            Button:
+                text: "Need More Time?"
+                font_size: '24sp'
+                on_release:
+                    app.root.transition.direction = 'left'
+                    app.root.current = 'walkin_detailed'
+
+            Button:
+                text: "Confirm"
+                font_size: '32sp'
+                bold: True
+                background_color: 0, 0.6, 0, 1
+                on_release: app.confirm_walkin(int(duration_slider.value))
+
+        Button:
+            text: "Back"
+            size_hint_y: None
+            height: dp(70)
+            font_size: '28sp'
+            on_release: app.goto_menu()
+
+# Walk-In Detailed Screen - Hour/Minute picker (for long durations)
+<WalkInDetailedScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text: "Walk-In Booking"
+            font_size: '36sp'
+            bold: True
+            size_hint_y: None
+            height: dp(60)
+
+        Widget:
+            size_hint_y: 0.05
+
+        # Hours selector
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(100)
+            spacing: dp(15)
+
+            Label:
+                text: "Hours:"
+                font_size: '28sp'
+                size_hint_x: 0.25
+                halign: 'right'
+                valign: 'middle'
+                text_size: self.size
+
+            Button:
+                text: "−"
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.2
+                on_release: app.decrease_walk_in_hours()
+
+            Label:
+                text: str(app.walk_in_hours)
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.3
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+            Button:
+                text: "+"
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.2
+                on_release: app.increase_walk_in_hours()
+
+        # Minutes selector
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(100)
+            spacing: dp(15)
+
+            Label:
+                text: "Minutes:"
+                font_size: '28sp'
+                size_hint_x: 0.25
+                halign: 'right'
+                valign: 'middle'
+                text_size: self.size
+
+            Button:
+                text: "−"
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.2
+                on_release: app.decrease_walk_in_minutes()
+
+            Label:
+                text: str(app.walk_in_minutes)
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.3
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+            Button:
+                text: "+"
+                font_size: '48sp'
+                bold: True
+                size_hint_x: 0.2
+                on_release: app.increase_walk_in_minutes()
+
+        Widget:
+            size_hint_y: 0.05
+
+        # Total duration display
+        Label:
+            text: f"Total Duration: {app.walk_in_hours}h {app.walk_in_minutes}m"
+            font_size: '28sp'
+            bold: True
+            size_hint_y: None
+            height: dp(50)
+
+        Label:
+            text: f"Appointment ends at: {app.walk_in_end_time_detailed}"
+            font_size: '24sp'
+            size_hint_y: None
+            height: dp(50)
+            color: 0.9, 0.9, 0.9, 1
+
+        Label:
+            text: app.walk_in_limit_reason
+            font_size: '18sp'
+            size_hint_y: None
+            height: dp(45)
+            color: 0.7, 0.7, 0.7, 1
+
+        Widget:
+            size_hint_y: 0.1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(75)
+            spacing: dp(10)
+
+            Button:
+                text: "Use Slider"
+                font_size: '24sp'
+                on_release:
+                    app.root.transition.direction = 'right'
+                    app.root.current = 'walkin'
+
+            Button:
+                text: "Confirm Walk-In"
+                font_size: '28sp'
+                bold: True
+                background_color: 0, 0.6, 0, 1
+                on_release: app.confirm_walkin_detailed()
+
+        Button:
+            text: "Back to Menu"
+            size_hint_y: None
+            height: dp(65)
+            font_size: '26sp'
+            on_release: app.goto_menu()
+
+# Keep your existing screens
+<SettingsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        Label:
+            text: 'Settings Screen'
+            font_size: '36sp'
+            bold: True
+        Button:
+            text: "Back to Menu"
+            size_hint: (1, 0.2)
+            font_size: '28sp'
+            on_release: app.goto_menu()
+
+<NewsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            text: 'News Screen'
+            font_size: '36sp'
+            bold: True
+        Widget:
+            size_hint_y: 1
+        Button:
+            text: 'Back to Menu'
+            size_hint_y: None
+            height: dp(80)
+            font_size: '28sp'
+            on_release: app.goto_menu()
+
+<WeatherScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            text: 'Weather Screen'
+            font_size: '36sp'
+            bold: True
+        Widget:
+            size_hint_y: 1
+        Button:
+            text: 'Back to Menu'
+            size_hint_y: None
+            height: dp(80)
+            font_size: '28sp'
+            on_release: app.goto_menu()
+
+<SmartHomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            text: 'Smart Home Screen'
+            font_size: '36sp'
+            bold: True
+        Widget:
+            size_hint_y: 1
+        Button:
+            text: 'Back to Menu'
+            size_hint_y: None
+            height: dp(80)
+            font_size: '28sp'
+            on_release: app.goto_menu()
