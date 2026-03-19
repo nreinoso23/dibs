@@ -96,12 +96,6 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-<p align="center">
-  <img src="docs/images/Code_Flowchart.jpeg" alt="Code Architecture Flowchart" width="700">
-  <br>
-  <em>Code architecture flowchart</em>
-</p>
-
 ---
 
 ## Hardware
@@ -109,7 +103,7 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Outer Device (Mounted outside room door)
 
 <p align="center">
-  <img src="docs/images/hardware/Outer_Device_Front.JPG" alt="Outer Device Front" width="400">
+  <img src="docs/images/hardware/Outer_Device_Front_Isometric.JPG" alt="Outer Device" width="400">
   <img src="docs/images/cad-renders/Outer_Device_Isometric.PNG" alt="Outer Device CAD" width="400">
 </p>
 
@@ -126,6 +120,7 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Inner Device (Mounted inside room)
 
 <p align="center">
+  <img src="docs/images/hardware/Inner_Device_Front.JPG" alt="Inner Device" width="400">
   <img src="docs/images/cad-renders/Inner_Device_Isometric.PNG" alt="Inner Device CAD" width="400">
 </p>
 
@@ -137,7 +132,7 @@ Built as a Semester Long Design Project (SLDP) at NYU Tandon School of Engineeri
 ### Circuit Diagrams
 
 <p align="center">
-  <img src="docs/images/circuit-diagrams/Outer_Circuit_Final.png" alt="Outer Device Circuit" width="400">
+  <img src="docs/images/circuit-diagrams/Outer_Circuit_Final_with_Cords.png" alt="Outer Device Circuit" width="400">
   <img src="docs/images/circuit-diagrams/Inner%20Circuit_Final.png" alt="Inner Device Circuit" width="400">
 </p>
 
